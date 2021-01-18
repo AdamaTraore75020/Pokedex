@@ -16,12 +16,17 @@
 
 package com.skydoves.pokedex.ui.main
 
+import android.graphics.Color
 import android.os.Bundle
+import android.service.autofill.TextValueSanitizer
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
-import android.widget.SearchView
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.annotation.VisibleForTesting
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import com.skydoves.pokedex.R
 import com.skydoves.pokedex.base.DataBindingActivity
 import com.skydoves.pokedex.databinding.ActivityMainBinding
@@ -46,15 +51,21 @@ class MainActivity : DataBindingActivity(), SearchView.OnQueryTextListener {
       adapter = this@MainActivity.adapter
       vm = viewModel
     }
+
+    val toolbar = findViewById<Toolbar>(R.id.toolbar)
+    setSupportActionBar(toolbar)
+
   }
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-    menuInflater.inflate(R.menu.toolbar_menu, menu)
+    super.onCreateOptionsMenu(menu)
+    val inflater: MenuInflater = menuInflater
+    inflater.inflate(R.menu.toolbar_menu, menu)
 
     val searchItem: MenuItem? = menu?.findItem(R.id.action_search)
     val searchView: SearchView? = searchItem?.actionView as SearchView?
     searchView?.setOnQueryTextListener(this)
-    return super.onCreateOptionsMenu(menu)
+    return true
   }
 
   override fun onQueryTextSubmit(query: String?): Boolean {
@@ -65,8 +76,5 @@ class MainActivity : DataBindingActivity(), SearchView.OnQueryTextListener {
     this.adapter.filter.filter(newText)
     return false
   }
-
-
-
 
 }

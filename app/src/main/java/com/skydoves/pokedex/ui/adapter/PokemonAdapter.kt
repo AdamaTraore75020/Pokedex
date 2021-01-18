@@ -31,10 +31,9 @@ import com.skydoves.pokedex.ui.details.DetailActivity
 
 class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>(), Filterable {
 
-  private val items: MutableList<Pokemon> = mutableListOf()
+  private var items: MutableList<Pokemon> = mutableListOf()
   private var onClickedAt = 0L
-  private lateinit var valueFilter: ValueFilter
-
+  lateinit var pokemonFilterList: List<Pokemon>
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
     val inflater = LayoutInflater.from(parent.context)
@@ -54,6 +53,11 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>(),
   }
 
   fun setPokemonList(pokemonList: List<Pokemon>) {
+    pokemonFilterList = pokemonList
+    resetData(pokemonList)
+  }
+
+  fun resetData(pokemonList: List<Pokemon>) {
     val previousItemSize = items.size
     items.clear()
     items.addAll(pokemonList)
@@ -73,24 +77,37 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>(),
     RecyclerView.ViewHolder(binding.root)
 
   override fun getFilter(): Filter {
-    TODO("Not yet implemented")
+    return valueFilter
   }
-}
 
-class ValueFilter : Filter() {
+  private val valueFilter = object : Filter() {
+    override fun performFiltering(constraint: CharSequence): FilterResults? {
+      var filterResults = FilterResults()
 
-  override fun performFiltering(constraint: CharSequence?): FilterResults {
-    var filterResults : FilterResults = FilterResults()
+      if (!constraint.isNullOrEmpty()) {
+        var filterList = mutableListOf<Pokemon>()
+        for (pokemon: Pokemon in pokemonFilterList) {
+          if (pokemon.name.toUpperCase().contains(constraint.toString().toUpperCase())) {
+            filterList.add(pokemon)
+          }
+        }
 
-    if (!constraint.isNullOrEmpty()) {
+        filterResults.count = filterList.size
+        filterResults.values = filterList
 
+      } else {
+        filterResults.count = pokemonFilterList.size
+        filterResults.values = pokemonFilterList
+      }
+
+      return filterResults
     }
 
-    return filterResults
+    override fun publishResults(constraint: CharSequence, results: FilterResults) {
+      items.clear()
+      items.addAll(results.values as MutableList<Pokemon>)
+      notifyDataSetChanged()
+    }
   }
-
-  override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-    TODO("Not yet implemented")
-  }
-
 }
+
