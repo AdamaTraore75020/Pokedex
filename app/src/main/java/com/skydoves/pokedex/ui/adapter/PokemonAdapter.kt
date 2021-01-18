@@ -19,6 +19,8 @@ package com.skydoves.pokedex.ui.adapter
 import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
@@ -27,10 +29,12 @@ import com.skydoves.pokedex.databinding.ItemPokemonBinding
 import com.skydoves.pokedex.model.Pokemon
 import com.skydoves.pokedex.ui.details.DetailActivity
 
-class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() {
+class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>(), Filterable {
 
   private val items: MutableList<Pokemon> = mutableListOf()
   private var onClickedAt = 0L
+  private lateinit var valueFilter: ValueFilter
+
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
     val inflater = LayoutInflater.from(parent.context)
@@ -67,4 +71,26 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() 
 
   class PokemonViewHolder(val binding: ItemPokemonBinding) :
     RecyclerView.ViewHolder(binding.root)
+
+  override fun getFilter(): Filter {
+    TODO("Not yet implemented")
+  }
+}
+
+class ValueFilter : Filter() {
+
+  override fun performFiltering(constraint: CharSequence?): FilterResults {
+    var filterResults : FilterResults = FilterResults()
+
+    if (!constraint.isNullOrEmpty()) {
+
+    }
+
+    return filterResults
+  }
+
+  override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+    TODO("Not yet implemented")
+  }
+
 }

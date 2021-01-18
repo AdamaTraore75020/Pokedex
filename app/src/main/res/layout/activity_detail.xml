@@ -354,6 +354,15 @@
         app:progressView_progress="@{vm.pokemonInfoLiveData.exp}"
         app:progressView_radius="12dp" />
 
+      <ImageView
+          android:id="@+id/imv_pokeball"
+          android:layout_width="200dp"
+          android:layout_height="200dp"
+          app:srcCompat="@drawable/ic_pokeball"
+          android:elevation="10dp"
+          app:layout_constraintBottom_toBottomOf="@id/header"
+          app:layout_constraintEnd_toEndOf="@id/header"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
   </androidx.core.widget.NestedScrollView>
